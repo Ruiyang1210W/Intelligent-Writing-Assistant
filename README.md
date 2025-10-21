@@ -2,10 +2,10 @@
 
 ## Team Members
 - Ruiyang Wang (016087383)
-- 
+- Colin Shiung (017426461)
 
 ## Project Description
-A writing tool integrates the OpenAI that focusing on areas like Job Cover letters, Statements of Purposes, essays with more human-sounding.
+A writing tool integrates the OpenAI API, focusing on areas like Job Cover letters, Statements of Purposes, and essays, making them more human-sounding.
 
 ## Features Implemented
 - [x] Feature 1
