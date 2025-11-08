@@ -1,51 +1,33 @@
 # Project Report
 
-## Design Decisions
-
-### Architecture Overview
-Explain your MVC structure and design pattern choices.
-
-### API Integration Strategy
-How you handle async calls, errors, rate limits.
-
-### Design Pattern Justifications
-Why did you choose specific patterns for specific problems?
-
 ## Challenges Faced
 
-### Challenge 1: API Rate Limiting
-**Problem:** ...
-**Solution:** ...
-**Learning:** ...
+### Challenge 1: API Limiting
+**Problem:** Open AI API required you to pay
+**Solution:** Paid 5$
+**Learning:** Money can solve problems
 
 ### Challenge 2: Error Handling
-**Problem:** ...
-**Solution:** ...
+**Problem:** JUnit run configure errors, the configure always run in Maven instead of Main file
+**Solution:** Uncheck the 'Delegate IDE build run to Maven'
 
-### Challenge 3: [Your challenge]
-**Problem:** ...
-**Solution:** ...
 
 ## Testing Strategy
 Describe your testing approach and coverage.
 
+## Design Pattern Justifications
+**Strategy Pattern:** Needed different AI behaviors (creative, professional, academic)
+**Factory Pattern:** Creating different request types cleanly
+**Observer Pattern:** 
+
 ## AI/LLM Usage Disclosure
 **Did you use AI tools (ChatGPT, Copilot, etc.)?**
-- [ ] Yes - Describe how and what
-- [ ] No
+Ruiyang used Claude to debug JUnit configure error
+Asked: Why I can't run directly in file and keep getting maven exec:exec error
+Modeified: Changed their suggestion to fit my error handler
+Verified: Run successfully with Main.
 
-If yes, explain:
-- What AI tools you used
-- What you asked them to do
-- How you verified/modified the output
-- What you learned from the process
-
-## Time Breakdown
-- Design & Planning: X hours
-- Implementation: X hours
-- Testing: X hours
-- Documentation: X hours
-- Total: X hours
+## Time Spent: 
 
 ## What We Learned
 - OOP concept reinforced

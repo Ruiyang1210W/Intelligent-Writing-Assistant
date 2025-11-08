@@ -8,16 +8,21 @@
 A writing tool integrates the OpenAI API, focusing on areas like Job Cover letters, Statements of Purposes, and essays, making them more human-sounding.
 
 ## Features Implemented
-- [x] Feature 1
-- [x] Feature 2
-- [ ] Extra credit feature
+- [x] Creative mode, Professional mode, Academic mode
+- [x] MVC Architecture
+- [x] API integration
+- [x] Junit Tests 28 passed
+- [ ] Swing GUI (Working)
 
 ## Design Patterns Used
-1. **Strategy Pattern** - Describe where and why
-2. **Factory Pattern** - Describe where and why
-3. **Observer Pattern** - Describe where and why
+1. **Strategy Pattern** - Different writing modes
+2. **Factory Pattern** - Request creation
+3. **Observer Pattern** - UI 
 
 ## Setup Instructions
+1. Get API key from https://platform.openai.com/
+2. `export API_KEY=your_key`
+3. Run Main.java
 
 ### Prerequisites
 - Java 11 or higher
@@ -31,19 +36,16 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 
 ### Dependencies
 - org.json (version)
-- JUnit 4.13
+- JUnit 5.10.1
 
-## Usage Guide
-Step-by-step instructions with screenshots.
 
 ## API Usage & Costs
 - Model used: gpt-3.5-turbo
 - Estimated cost per request: $0.002
 - Cost management strategies
 
-## Known Issues
-- Issue 1 and workaround
-- Issue 2 and workaround
+
+## Demo link: 
 
 ## Future Enhancements
 - Feature we'd add with more time
