@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="writing_assistant" />
+        <module name="Intelligent-Writing-Assistant" />
       </profile>
     </annotationProcessing>
   </component>

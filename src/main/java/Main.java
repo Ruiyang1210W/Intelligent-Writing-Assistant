@@ -1,13 +1,25 @@
-import io.github.cdimascio.dotenv.Dotenv;
+import view.MainFrame;
 
+import javax.swing.*;
+
+/**
+ * Main entry point for the Intelligent Writing Assistant application
+ */
 public class Main {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load(); // Loads .env from the current working directory
+        // Set system look and feel for better UI appearance
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println("Failed to set system look and feel: " + e.getMessage());
+        }
 
-        String apiKey = dotenv.get("OPENAI_API_KEY");
-
-        System.out.println("API Key: " + apiKey);
+        // Launch the application on the Event Dispatch Thread (EDT)
+        // This is required for Swing applications to ensure thread safety
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
     }
-
 }

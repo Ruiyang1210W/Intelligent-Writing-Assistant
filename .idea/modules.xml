@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Intelligent-Writing-Assistant.iml" filepath="$PROJECT_DIR$/Intelligent-Writing-Assistant.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/test/test.iml" filepath="$PROJECT_DIR$/src/test/test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/writing_assistant.iml" filepath="$PROJECT_DIR$/writing_assistant.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,150 @@
 package view;
-// JFrame main window
-public class MainFrame {
+
+import controller.AIController;
+import controller.SaveLoadController;
+import model.ContentModel;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Main application window - MVC View component
+ * Coordinates all UI panels and controllers
+ */
+public class MainFrame extends JFrame {
+
+    private ContentModel model;
+    private AIController aiController;
+    private SaveLoadController saveLoadController;
+
+    private InputPanel inputPanel;
+    private OutputPanel outputPanel;
+    private ControlPanel controlPanel;
+
+    public MainFrame() {
+        // Initialize model and controllers
+        this.model = new ContentModel();
+        this.aiController = new AIController(model);
+        this.saveLoadController = new SaveLoadController(model);
+
+        // Setup frame
+        setTitle("Intelligent Writing Assistant");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 700);
+        setLocationRelativeTo(null); // Center on screen
+        setLayout(new BorderLayout(10, 10));
+
+        // Create menu bar
+        createMenuBar();
+
+        // Initialize panels
+        initializePanels();
+
+        // Add panels to frame
+        layoutPanels();
+    }
+
+    /**
+     * Create and setup menu bar
+     */
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // File menu
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem saveItem = new JMenuItem("Save Session");
+        JMenuItem loadItem = new JMenuItem("Load Session");
+        JMenuItem exitItem = new JMenuItem("Exit");
+
+        saveItem.addActionListener(e -> saveLoadController.saveSession());
+        loadItem.addActionListener(e -> saveLoadController.loadSession(this));
+        exitItem.addActionListener(e -> System.exit(0));
+
+        fileMenu.add(saveItem);
+        fileMenu.add(loadItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
+
+        // Help menu
+        JMenu helpMenu = new JMenu("Help");
+        JMenuItem aboutItem = new JMenuItem("About");
+        aboutItem.addActionListener(e -> showAboutDialog());
+        helpMenu.add(aboutItem);
+
+        menuBar.add(fileMenu);
+        menuBar.add(helpMenu);
+
+        setJMenuBar(menuBar);
+    }
+
+    /**
+     * Initialize all panels
+     */
+    private void initializePanels() {
+        inputPanel = new InputPanel(model);
+        outputPanel = new OutputPanel(model);
+        controlPanel = new ControlPanel(model, aiController);
+    }
+
+    /**
+     * Layout panels in the frame
+     */
+    private void layoutPanels() {
+        // Create split pane for input and output
+        JSplitPane splitPane = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,
+            inputPanel,
+            outputPanel
+        );
+        splitPane.setDividerLocation(450);
+        splitPane.setResizeWeight(0.5);
+
+        // Add components
+        add(splitPane, BorderLayout.CENTER);
+        add(controlPanel, BorderLayout.SOUTH);
+
+        // Add padding
+        ((JComponent) getContentPane()).setBorder(
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        );
+    }
+
+    /**
+     * Show about dialog
+     */
+    private void showAboutDialog() {
+        String message = "Intelligent Writing Assistant\n\n" +
+                        "An AI-powered writing tool with multiple modes:\n" +
+                        "- Creative\n" +
+                        "- Professional\n" +
+                        "- Academic\n\n" +
+                        "Powered by OpenAI GPT-3.5\n" +
+                        "Version 1.0";
+
+        JOptionPane.showMessageDialog(
+            this,
+            message,
+            "About",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    /**
+     * Launch the application
+     */
+    public static void main(String[] args) {
+        // Use system look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Launch on Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
+    }
 }
+
