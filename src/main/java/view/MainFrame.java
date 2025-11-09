@@ -6,6 +6,9 @@ import model.ContentModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Main application window - MVC View component
@@ -60,8 +63,22 @@ public class MainFrame extends JFrame {
         loadItem.addActionListener(e -> saveLoadController.loadSession(this));
         exitItem.addActionListener(e -> System.exit(0));
 
+        //add most recent sessions up to 3
+        JMenu recentSessions = new JMenu("Recent Sessions");
+        File folder = new File("saves");
+        File[] files = folder.listFiles();
+        Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+        for(int i = 0; i < files.length && i <= 3; i++){
+            JMenuItem recent = new JMenuItem(files[i].getName());
+            int finalI = i;
+            recent.addActionListener(e -> saveLoadController.loadSession(this, files[finalI]));
+            recentSessions.add(recent);
+        }
+        recentSessions.addSeparator();
+        recentSessions.add(loadItem);
+
         fileMenu.add(saveItem);
-        fileMenu.add(loadItem);
+        fileMenu.add(recentSessions);
         fileMenu.addSeparator();
         fileMenu.add(exitItem);
 

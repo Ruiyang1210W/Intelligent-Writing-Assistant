@@ -1,7 +1,7 @@
 package model;
 
-import service.OpenAIService;
 import io.github.cdimascio.dotenv.Dotenv;
+import service.OpenAIService;
 
 /**
  * Singleton Pattern Implementation

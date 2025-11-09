@@ -21,6 +21,7 @@ public class SaveLoadController {
 
     private ContentModel model;
     private static final String DEFAULT_EXTENSION = ".json";
+    File defaultDirectory = new File("saves");
 
     public SaveLoadController(ContentModel model) {
         this.model = model;
@@ -31,7 +32,7 @@ public class SaveLoadController {
      */
     public void saveSession() {
         // Create file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(defaultDirectory);
         fileChooser.setDialogTitle("Save Session");
         fileChooser.setFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
         fileChooser.setSelectedFile(new File("session_" + System.currentTimeMillis() + DEFAULT_EXTENSION));
@@ -49,9 +50,9 @@ public class SaveLoadController {
             try {
                 // Create session model
                 SessionModel session = new SessionModel(
-                    model.getInputText(),
-                    model.getOutputText(),
-                    model.getCurrentStrategy().getStrategyName()
+                        model.getInputText(),
+                        model.getOutputText(),
+                        model.getCurrentStrategy().getStrategyName()
                 );
 
                 // Convert to JSON
@@ -61,10 +62,10 @@ public class SaveLoadController {
                 Files.writeString(Paths.get(fileToSave.getAbsolutePath()), json.toString(2));
 
                 JOptionPane.showMessageDialog(
-                    null,
-                    "Session saved successfully!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE
+                        null,
+                        "Session saved successfully!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
                 );
 
             } catch (Exception e) {
@@ -78,7 +79,7 @@ public class SaveLoadController {
      */
     public void loadSession(JFrame parent) {
         // Create file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(defaultDirectory);
         fileChooser.setDialogTitle("Load Session");
         fileChooser.setFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
 
@@ -101,15 +102,40 @@ public class SaveLoadController {
                 model.setCurrentStrategy(StrategyFactory.createStrategy(session.getStrategyName()));
 
                 JOptionPane.showMessageDialog(
-                    parent,
-                    "Session loaded successfully!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE
+                        parent,
+                        "Session loaded successfully!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
                 );
 
             } catch (Exception e) {
                 ErrorHandler.showError("Load Error", "Failed to load session: " + e.getMessage());
             }
+        }
+    }
+    public void loadSession (JFrame parent, File file){
+        try {
+            // Read file
+            String content = Files.readString(Paths.get(file.getAbsolutePath()));
+
+            // Parse JSON
+            JSONObject json = new JSONObject(content);
+            SessionModel session = jsonToSession(json);
+
+            // Update model
+            model.setInputText(session.getInputText());
+            model.setOutputText(session.getOutputText());
+            model.setCurrentStrategy(StrategyFactory.createStrategy(session.getStrategyName()));
+
+            JOptionPane.showMessageDialog(
+                    parent,
+                    "Session loaded successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (Exception e) {
+            ErrorHandler.showError("Load Error", "Failed to load session: " + e.getMessage());
         }
     }
 
@@ -129,7 +155,7 @@ public class SaveLoadController {
     /**
      * Convert JSON to SessionModel
      */
-    private SessionModel jsonToSession(JSONObject json) {
+    public SessionModel jsonToSession(JSONObject json) {
         SessionModel session = new SessionModel();
         session.setInputText(json.getString("inputText"));
         session.setOutputText(json.getString("outputText"));
