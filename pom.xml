@@ -40,6 +40,18 @@
             <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.phat/sphinx4-core -->
+        <dependency>
+            <groupId>net.sf.phat</groupId>
+            <artifactId>sphinx4-core</artifactId>
+            <version>5prealpha</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.phat/sphinx4-data -->
+        <dependency>
+            <groupId>net.sf.phat</groupId>
+            <artifactId>sphinx4-data</artifactId>
+            <version>5prealpha</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -66,5 +78,17 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

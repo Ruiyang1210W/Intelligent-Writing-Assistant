@@ -2,11 +2,13 @@ package view;
 
 import controller.AIController;
 import controller.SaveLoadController;
+import controller.SpeechConverter;
 import model.ContentModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -19,16 +21,18 @@ public class MainFrame extends JFrame {
     private ContentModel model;
     private AIController aiController;
     private SaveLoadController saveLoadController;
+    private SpeechConverter speechConverter;
 
     private InputPanel inputPanel;
     private OutputPanel outputPanel;
     private ControlPanel controlPanel;
 
-    public MainFrame() {
+    public MainFrame() throws IOException {
         // Initialize model and controllers
         this.model = new ContentModel();
         this.aiController = new AIController(model);
         this.saveLoadController = new SaveLoadController(model);
+        this.speechConverter = new SpeechConverter(model);
 
         // Setup frame
         setTitle("Intelligent Writing Assistant");
@@ -98,7 +102,7 @@ public class MainFrame extends JFrame {
      * Initialize all panels
      */
     private void initializePanels() {
-        inputPanel = new InputPanel(model);
+        inputPanel = new InputPanel(model, speechConverter);
         outputPanel = new OutputPanel(model);
         controlPanel = new ControlPanel(model, aiController);
     }
@@ -159,7 +163,12 @@ public class MainFrame extends JFrame {
 
         // Launch on Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame();
+            MainFrame frame = null;
+            try {
+                frame = new MainFrame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             frame.setVisible(true);
         });
     }

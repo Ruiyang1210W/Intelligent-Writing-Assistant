@@ -1,14 +1,29 @@
+import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.result.WordResult;
 import view.MainFrame;
 
 import javax.swing.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import edu.cmu.sphinx.api.Configuration;
+import edu.cmu.sphinx.api.SpeechResult;
+import edu.cmu.sphinx.api.StreamSpeechRecognizer;
 
 /**
  * Main entry point for the Intelligent Writing Assistant application
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+
+
         // Set system look and feel for better UI appearance
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -18,8 +33,14 @@ public class Main {
         // Launch the application on the Event Dispatch Thread (EDT)
         // This is required for Swing applications to ensure thread safety
         SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame();
+            MainFrame frame = null;
+            try {
+                frame = new MainFrame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             frame.setVisible(true);
         });
+
     }
 }

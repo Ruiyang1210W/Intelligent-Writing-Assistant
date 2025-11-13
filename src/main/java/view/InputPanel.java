@@ -1,27 +1,35 @@
 package view;
 
+import controller.SpeechConverter;
 import model.ContentModel;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 /**
  * Panel for user input
  * Implements Observer Pattern to listen to model changes
  */
-public class InputPanel extends JPanel implements PropertyChangeListener {
+public class InputPanel extends JPanel implements PropertyChangeListener{
 
     private ContentModel model;
+    private SpeechConverter speechConverter;
     private JTextArea inputArea;
     private JLabel charCountLabel;
+    private JButton voiceInput;
 
-    public InputPanel(ContentModel model) {
+    public InputPanel(ContentModel model, SpeechConverter speechConverter) {
         this.model = model;
         this.model.addPropertyChangeListener(this);
+        this.speechConverter = speechConverter;
 
         setLayout(new BorderLayout(5, 5));
         setBorder(BorderFactory.createTitledBorder("Input"));
@@ -59,13 +67,42 @@ public class InputPanel extends JPanel implements PropertyChangeListener {
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(inputArea);
-        add(scrollPane, BorderLayout.CENTER);
+        /*SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                while(true){
+                    String newText = (String) model.getInputText();
+                    if (!inputArea.getText().equals(newText)) {
+                        inputArea.setText(newText);
+                        updateCharCount();
+                    }
+                }
+            }
+        };
+        worker.execute(); */
+        JPanel footer = new JPanel(new BorderLayout());
+        voiceInput = new JButton("microphone");
+        voiceInput.addActionListener(e -> {
+            speechConverter.setToggle();
+            try {
+                textToSpeechToggle();
+            } catch (LineUnavailableException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        voiceInput.setHorizontalAlignment(SwingConstants.LEFT);
+        voiceInput.setSize(10,10);
+        footer.add(voiceInput, BorderLayout.WEST);
 
         // Character count label
         charCountLabel = new JLabel("Characters: 0");
         charCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        add(charCountLabel, BorderLayout.SOUTH);
+        footer.add(charCountLabel, BorderLayout.EAST);
+
+        add(footer, BorderLayout.SOUTH);
+
+        JScrollPane scrollPane = new JScrollPane(inputArea);
+        add(scrollPane);
     }
 
     /**
@@ -89,5 +126,33 @@ public class InputPanel extends JPanel implements PropertyChangeListener {
             }
         }
     }
+
+    public void textToSpeechToggle() throws LineUnavailableException, IOException {
+        Thread backgroundThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (speechConverter.getToggle()) {
+                    // start speech recognition from microphone
+                    System.out.println("Microphone ON");
+                    voiceInput.setText("Stop Listening");
+                    try {
+                        speechConverter.speechToText();
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    // Logic to STOP speech recognition
+                    System.out.println("Microphone OFF");
+                    voiceInput.setText("Start Listening");
+                    // Signal the audio capture thread to stop
+                }
+            }
+        });
+        backgroundThread.start();
+    }
+
+
 }
 

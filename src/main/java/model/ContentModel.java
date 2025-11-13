@@ -47,6 +47,11 @@ public class ContentModel {
         support.firePropertyChange("inputText", oldValue, inputText);
     }
 
+    public void appendInputText(String inputText){
+        String oldValue = this.inputText;
+        support.firePropertyChange("inputText", oldValue, oldValue + " " + inputText);
+    }
+
     public String getOutputText() {
         return outputText;
     }
