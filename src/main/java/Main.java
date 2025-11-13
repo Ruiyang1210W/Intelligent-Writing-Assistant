@@ -20,8 +20,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-
-
         // Set system look and feel for better UI appearance
 
         try {

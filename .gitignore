@@ -1,4 +1,18 @@
-.env
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.properties
+
+# IntelliJ
 .idea/
-.vscode/
-main.iml
+*.iml
+out/
+
+# Logs/OS
+*.log
+.DS_Store
+
+# Env
+.env
+.env.*
+.env.example

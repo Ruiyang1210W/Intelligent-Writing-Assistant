@@ -23,8 +23,9 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
         this.model = model;
         this.model.addPropertyChangeListener(this);
 
-        setLayout(new BorderLayout(5, 5));
-        setBorder(BorderFactory.createTitledBorder("Generated Output"));
+        setLayout(new BorderLayout(8, 8));
+        setBorder(UITheme.createTitledBorder("Generated Output"));
+        setBackground(UITheme.PANEL_BG);
 
         initializeComponents();
     }
@@ -34,21 +35,36 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
         outputArea = new JTextArea();
         outputArea.setLineWrap(true);
         outputArea.setWrapStyleWord(true);
-        outputArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        outputArea.setFont(UITheme.TEXT_AREA_FONT);
         outputArea.setEditable(false);
-        outputArea.setBackground(new Color(245, 245, 245));
+        outputArea.setBackground(UITheme.TEXT_AREA_BG);
+        outputArea.setForeground(UITheme.TEXT_COLOR);
+        outputArea.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(UITheme.BORDER_COLOR, 1),
+            BorderFactory.createEmptyBorder(UITheme.PADDING_MEDIUM, UITheme.PADDING_MEDIUM,
+                                           UITheme.PADDING_MEDIUM, UITheme.PADDING_MEDIUM)
+        ));
 
         JScrollPane scrollPane = new JScrollPane(outputArea);
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setBackground(UITheme.TEXT_AREA_BG);
         add(scrollPane, BorderLayout.CENTER);
 
         // Bottom panel with copy button and word count
         JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(UITheme.PANEL_BG);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(
+            UITheme.PADDING_SMALL, 0, 0, 0
+        ));
 
         copyButton = new JButton("Copy to Clipboard");
         copyButton.addActionListener(e -> copyToClipboard());
         copyButton.setEnabled(false);
+        UITheme.styleButton(copyButton, false);
 
         wordCountLabel = new JLabel("Words: 0");
+        wordCountLabel.setFont(UITheme.LABEL_FONT);
+        wordCountLabel.setForeground(UITheme.TEXT_COLOR);
         wordCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         bottomPanel.add(copyButton, BorderLayout.WEST);

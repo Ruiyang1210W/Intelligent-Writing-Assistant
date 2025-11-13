@@ -31,8 +31,9 @@ public class InputPanel extends JPanel implements PropertyChangeListener{
         this.model.addPropertyChangeListener(this);
         this.speechConverter = speechConverter;
 
-        setLayout(new BorderLayout(5, 5));
-        setBorder(BorderFactory.createTitledBorder("Input"));
+        setLayout(new BorderLayout(8, 8));
+        setBorder(UITheme.createTitledBorder("Input"));
+        setBackground(UITheme.PANEL_BG);
 
         initializeComponents();
     }
@@ -42,7 +43,14 @@ public class InputPanel extends JPanel implements PropertyChangeListener{
         inputArea = new JTextArea();
         inputArea.setLineWrap(true);
         inputArea.setWrapStyleWord(true);
-        inputArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        inputArea.setFont(UITheme.TEXT_AREA_FONT);
+        inputArea.setBackground(UITheme.TEXT_AREA_BG);
+        inputArea.setForeground(UITheme.TEXT_COLOR);
+        inputArea.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(UITheme.BORDER_COLOR, 1),
+            BorderFactory.createEmptyBorder(UITheme.PADDING_MEDIUM, UITheme.PADDING_MEDIUM,
+                                           UITheme.PADDING_MEDIUM, UITheme.PADDING_MEDIUM)
+        ));
 
         // Listen to text changes and update model
         inputArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -81,7 +89,12 @@ public class InputPanel extends JPanel implements PropertyChangeListener{
         };
         worker.execute(); */
         JPanel footer = new JPanel(new BorderLayout());
-        voiceInput = new JButton("microphone");
+        footer.setBackground(UITheme.PANEL_BG);
+        footer.setBorder(BorderFactory.createEmptyBorder(
+            UITheme.PADDING_SMALL, 0, 0, 0
+        ));
+
+        voiceInput = new JButton("Voice Input");
         voiceInput.addActionListener(e -> {
             speechConverter.setToggle();
             try {
@@ -90,18 +103,21 @@ public class InputPanel extends JPanel implements PropertyChangeListener{
                 throw new RuntimeException(ex);
             }
         });
-        voiceInput.setHorizontalAlignment(SwingConstants.LEFT);
-        voiceInput.setSize(10,10);
+        UITheme.styleButton(voiceInput, false);
         footer.add(voiceInput, BorderLayout.WEST);
 
         // Character count label
         charCountLabel = new JLabel("Characters: 0");
+        charCountLabel.setFont(UITheme.LABEL_FONT);
+        charCountLabel.setForeground(UITheme.TEXT_COLOR);
         charCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         footer.add(charCountLabel, BorderLayout.EAST);
 
         add(footer, BorderLayout.SOUTH);
 
         JScrollPane scrollPane = new JScrollPane(inputArea);
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setBackground(UITheme.TEXT_AREA_BG);
         add(scrollPane);
     }
 
@@ -145,7 +161,7 @@ public class InputPanel extends JPanel implements PropertyChangeListener{
                 } else {
                     // Logic to STOP speech recognition
                     System.out.println("Microphone OFF");
-                    voiceInput.setText("Start Listening");
+                    voiceInput.setText("Voice Input");
                     // Signal the audio capture thread to stop
                 }
             }

@@ -31,46 +31,67 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
         this.controller = controller;
         this.model.addPropertyChangeListener(this);
 
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        setLayout(new BorderLayout(12, 12));
+        setBackground(UITheme.PANEL_BG);
+        setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(1, 0, 0, 0, UITheme.BORDER_COLOR),
+            BorderFactory.createEmptyBorder(
+                UITheme.PADDING_LARGE, 0, UITheme.PADDING_SMALL, 0
+            )
+        ));
 
         initializeComponents();
     }
 
     private void initializeComponents() {
         // Left panel - Strategy selection
-        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, UITheme.PADDING_MEDIUM, 0));
+        leftPanel.setBackground(UITheme.PANEL_BG);
+
         JLabel strategyLabel = new JLabel("Writing Mode:");
+        strategyLabel.setFont(UITheme.NORMAL_FONT);
+        strategyLabel.setForeground(UITheme.TEXT_COLOR);
+
         strategyComboBox = new JComboBox<>(new String[]{
             "Professional",
             "Creative",
             "Academic"
         });
+        strategyComboBox.setFont(UITheme.NORMAL_FONT);
+        strategyComboBox.setBackground(Color.WHITE);
+        strategyComboBox.setPreferredSize(new Dimension(140, 32));
         strategyComboBox.addActionListener(e -> updateStrategy());
 
         leftPanel.add(strategyLabel);
         leftPanel.add(strategyComboBox);
 
         // Center panel - Buttons
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, UITheme.PADDING_MEDIUM, 0));
+        centerPanel.setBackground(UITheme.PANEL_BG);
+
         generateButton = new JButton("Generate");
-        generateButton.setFont(new Font("Arial", Font.BOLD, 14));
-        generateButton.setPreferredSize(new Dimension(120, 35));
+        generateButton.setPreferredSize(new Dimension(140, 40));
         generateButton.addActionListener(e -> controller.generateText());
+        UITheme.styleButton(generateButton, true);  // Primary button
 
         clearButton = new JButton("Clear");
-        clearButton.setPreferredSize(new Dimension(100, 35));
+        clearButton.setPreferredSize(new Dimension(100, 40));
         clearButton.addActionListener(e -> clearContent());
+        UITheme.styleButton(clearButton, false);
 
         centerPanel.add(generateButton);
         centerPanel.add(clearButton);
 
         // Right panel - Progress bar
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, UITheme.PADDING_MEDIUM, 0));
+        rightPanel.setBackground(UITheme.PANEL_BG);
+
         progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
         progressBar.setVisible(false);
-        progressBar.setPreferredSize(new Dimension(150, 25));
+        progressBar.setPreferredSize(new Dimension(180, 30));
+        progressBar.setForeground(UITheme.PRIMARY);
+        progressBar.setBorder(BorderFactory.createLineBorder(UITheme.BORDER_COLOR, 1));
 
         rightPanel.add(progressBar);
 

@@ -37,9 +37,12 @@ public class MainFrame extends JFrame {
         // Setup frame
         setTitle("Intelligent Writing Assistant");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 700);
+        setSize(1200, 750);
         setLocationRelativeTo(null); // Center on screen
         setLayout(new BorderLayout(10, 10));
+
+        // Set background color
+        getContentPane().setBackground(UITheme.BACKGROUND);
 
         // Create menu bar
         createMenuBar();
@@ -117,8 +120,10 @@ public class MainFrame extends JFrame {
             inputPanel,
             outputPanel
         );
-        splitPane.setDividerLocation(450);
+        splitPane.setDividerLocation(550);
         splitPane.setResizeWeight(0.5);
+        splitPane.setDividerSize(8);
+        splitPane.setBorder(null);
 
         // Add components
         add(splitPane, BorderLayout.CENTER);
@@ -126,7 +131,12 @@ public class MainFrame extends JFrame {
 
         // Add padding
         ((JComponent) getContentPane()).setBorder(
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            BorderFactory.createEmptyBorder(
+                UITheme.PADDING_LARGE,
+                UITheme.PADDING_LARGE,
+                UITheme.PADDING_LARGE,
+                UITheme.PADDING_LARGE
+            )
         );
     }
 
