@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
     private OutputPanel outputPanel;
     private ControlPanel controlPanel;
 
+    private JMenuBar menuBar;
     public MainFrame() throws IOException {
         // Initialize model and controllers
         this.model = new ContentModel();
@@ -58,7 +59,7 @@ public class MainFrame extends JFrame {
      * Create and setup menu bar
      */
     private void createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
 
         // File menu
         JMenu fileMenu = new JMenu("File");
@@ -66,22 +67,19 @@ public class MainFrame extends JFrame {
         JMenuItem loadItem = new JMenuItem("Load Session");
         JMenuItem exitItem = new JMenuItem("Exit");
 
-        saveItem.addActionListener(e -> saveLoadController.saveSession());
+        saveItem.addActionListener(e -> {
+            saveLoadController.saveSession();
+            createMenuBar();
+            fileMenu.revalidate();
+            fileMenu.repaint();
+            this.revalidate();
+            this.repaint();
+        });
         loadItem.addActionListener(e -> saveLoadController.loadSession(this));
         exitItem.addActionListener(e -> System.exit(0));
 
         //add most recent sessions up to 3
-        JMenu recentSessions = new JMenu("Recent Sessions");
-        File folder = new File("saves");
-        File[] files = folder.listFiles();
-        Arrays.sort(files, Comparator.comparingLong(File::lastModified));
-        for(int i = 0; i < files.length && i <= 3; i++){
-            JMenuItem recent = new JMenuItem(files[i].getName());
-            int finalI = i;
-            recent.addActionListener(e -> saveLoadController.loadSession(this, files[finalI]));
-            recentSessions.add(recent);
-        }
-        recentSessions.addSeparator();
+        JMenu recentSessions = initializeRecentSessions();
         recentSessions.add(loadItem);
 
         fileMenu.add(saveItem);
@@ -108,6 +106,21 @@ public class MainFrame extends JFrame {
         inputPanel = new InputPanel(model, speechConverter);
         outputPanel = new OutputPanel(model);
         controlPanel = new ControlPanel(model, aiController);
+    }
+
+    private JMenu initializeRecentSessions(){
+        JMenu recentSessions = new JMenu("Recent Sessions");
+        File folder = new File("saves");
+        File[] files = folder.listFiles();
+        Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+        for(int i = 0; i < files.length && i <= 3; i++){
+            JMenuItem recent = new JMenuItem(files[i].getName());
+            int finalI = i;
+            recent.addActionListener(e -> saveLoadController.loadSession(this, files[finalI]));
+            recentSessions.add(recent);
+        }
+        recentSessions.addSeparator();
+        return recentSessions;
     }
 
     /**
