@@ -44,6 +44,7 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 - Cost management strategies
 
 ## Demo link: 
+https://youtu.be/IXhAHxCp_JU
 
 ## Future Enhancements
 - Multi-language translation;
