@@ -22,11 +22,17 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 ## Setup Instructions
 1. Get API key from https://platform.openai.com/
 2. `export API_KEY=your_key`
-3. Run Main.java
+3. Go to https://cloud.google.com/text-to-speech and click "Try Text to Speech"
+4. Enable TTS for your project
+5. Install Google Cloud from CLI https://docs.cloud.google.com/sdk/docs/install
+6. run `gcloud auth application-default login` in Command Prompt and log into Google
+7. Select the Google Cloud project that enabled Text-To-Speech API
+8. Run Main.java
 
 ### Prerequisites
 - Java 11 or higher
 - OpenAI API key
+- Google Account & Google Cloud API Access
 
 ### Installation
 1. Clone repository
@@ -42,10 +48,12 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 - Model used: gpt-3.5-turbo
 - Estimated cost per request: $0.002
 - Cost management strategies
+**Cloud Text-to-Speech API**
+- Estimated cost per request: $0 for the first 10 million words
+- Very cost-effective
 
 ## Demo link: 
 https://youtu.be/IXhAHxCp_JU
 
 ## Future Enhancements
-- Multi-language translation;
-- Voice output
+- Multi-language translation
