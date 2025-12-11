@@ -1,12 +1,15 @@
 package view;
 
+import controller.SpeechConverter;
 import model.ContentModel;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 /**
  * Panel for displaying AI-generated output
@@ -17,9 +20,12 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
     private ContentModel model;
     private JTextArea outputArea;
     private JButton copyButton;
+    private JButton ttsButton;
     private JLabel wordCountLabel;
+    private SpeechConverter speechConverter;
 
-    public OutputPanel(ContentModel model) {
+    public OutputPanel(ContentModel model, SpeechConverter speechConverter) {
+        this.speechConverter = speechConverter;
         this.model = model;
         this.model.addPropertyChangeListener(this);
 
@@ -31,6 +37,8 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
     }
 
     private void initializeComponents() {
+
+
         // Text area for output (read-only)
         outputArea = new JTextArea();
         outputArea.setLineWrap(true);
@@ -57,6 +65,22 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
             UITheme.PADDING_SMALL, 0, 0, 0
         ));
 
+        JPanel bottomMiddlePanel = new JPanel();
+        bottomMiddlePanel.setBackground(UITheme.PANEL_BG);
+        ttsButton = new JButton("Text to Speech");
+        ttsButton.addActionListener(e -> {
+            speechConverter.setToggle();
+            try {
+                textToSpeechToggle();
+            } catch (LineUnavailableException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        UITheme.styleButton(ttsButton, false);
+        bottomMiddlePanel.add(ttsButton, BorderLayout.WEST);
+
         copyButton = new JButton("Copy to Clipboard");
         copyButton.addActionListener(e -> copyToClipboard());
         copyButton.setEnabled(false);
@@ -68,6 +92,7 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
         wordCountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         bottomPanel.add(copyButton, BorderLayout.WEST);
+        bottomPanel.add(bottomMiddlePanel);
         bottomPanel.add(wordCountLabel, BorderLayout.EAST);
 
         add(bottomPanel, BorderLayout.SOUTH);
@@ -111,6 +136,29 @@ public class OutputPanel extends JPanel implements PropertyChangeListener {
             updateWordCount();
             copyButton.setEnabled(!newText.isEmpty());
         }
+    }
+
+    public void textToSpeechToggle() throws LineUnavailableException, IOException {
+        Thread backgroundThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (speechConverter.getToggle()) {
+                    // start speech recognition from microphone
+                    System.out.println("TTS ON");
+                    ttsButton.setText("Stop");
+                    speechConverter.textToSpeech();
+                    speechConverter.player.close();
+                    System.out.println("TTS OFF");
+                    ttsButton.setText("Text to Speech");
+                } else {
+                    speechConverter.player.close();
+                    // Logic to STOP speech recognition
+                    System.out.println("TTS OFF");
+                    ttsButton.setText("Text to Speech");
+                }
+            }
+        });
+        backgroundThread.start();
     }
 }
 

@@ -104,7 +104,7 @@ public class MainFrame extends JFrame {
      */
     private void initializePanels() {
         inputPanel = new InputPanel(model, speechConverter);
-        outputPanel = new OutputPanel(model);
+        outputPanel = new OutputPanel(model, speechConverter);
         controlPanel = new ControlPanel(model, aiController);
     }
 
