@@ -48,6 +48,7 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 - Model used: gpt-3.5-turbo
 - Estimated cost per request: $0.002
 - Cost management strategies
+
 **Cloud Text-to-Speech API**
 - Estimated cost per request: $0 for the first 10 million words
 - Very cost-effective
