@@ -53,8 +53,8 @@ A writing tool integrates the OpenAI API, focusing on areas like Job Cover lette
 - Estimated cost per request: $0 for the first 10 million words
 - Very cost-effective
 
-## Demo link: 
-https://youtu.be/IXhAHxCp_JU
+## Demo & Code Explanation Video: 
+https://youtu.be/jPxafg36wL4
 
 ## Future Enhancements
 - Multi-language translation
